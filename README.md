@@ -1,0 +1,4 @@
+redirects
+=========
+
+Redirects for WordPress.
