@@ -1,4 +1,4 @@
-redirects
+Redirects
 =========
 
-Redirects for WordPress.
+Redirects for WordPress. No additional features.

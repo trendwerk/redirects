@@ -1,0 +1,72 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Redirects\n"
+"POT-Creation-Date: 2014-10-31 12:01+0100\n"
+"PO-Revision-Date: 2014-10-31 12:03+0100\n"
+"Last-Translator: Harold <harold@trendwerk.nl>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.5\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-Basepath: ../../\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: class-tp-redirects.php:268 class-tp-redirects.php:280
+msgid "Redirects"
+msgstr "Redirects"
+
+#: class-tp-redirects.php:284
+msgid "Find or create redirect.."
+msgstr "Zoek of maak nieuwe redirect.."
+
+#: class-tp-redirects.php:285
+msgid "Add"
+msgstr "Toevoegen"
+
+#: class-tp-redirects.php:310
+msgid "Source"
+msgstr "Bron"
+
+#: class-tp-redirects.php:314
+msgid "Destination"
+msgstr "Doel"
+
+#: class-tp-redirects.php:365
+msgid "Edit"
+msgstr "Bewerken"
+
+#: class-tp-redirects.php:366
+msgid "Remove"
+msgstr "Verwijderen"
+
+#: class-tp-redirects.php:400
+msgid ""
+"This redirect doesn't exist yet. Press &ldquo;Enter&rdquo; to create it."
+msgstr ""
+"Deze redirect bestaat nog niet. Druk op &ldquo;Enter&rdquo; om hem te maken."
+
+#: class-tp-redirects.php:401
+msgid "Are you sure you want to delete this redirect?"
+msgstr "Weet je zeker dat je deze redirect wilt verwijderen?"
+
+#: class-tp-redirects.php:402
+msgid "Save"
+msgstr "Opslaan"
+
+#: class-tp-redirects.php:403
+msgid "Dismiss"
+msgstr "Afbreken"
+
+#: class-tp-redirects.php:420
+msgid "&ldquo;Enter&rdquo; to create"
+msgstr "&ldquo;Enter&rdquo; om nieuwe te maken"
+
+#: class-tp-redirects.php:421
+msgid ""
+"Press &ldquo;Enter&rdquo; to create or edit the redirect you're searching "
+"for."
+msgstr ""
+"Druk op &ldquo;Enter&rdquo; om de redirect waar je naar zoekt te bewerken of "
+"te maken."
