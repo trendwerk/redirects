@@ -2,6 +2,8 @@
 /**
  * Plugin Name: Redirects
  * Description: Redirects. No additional features.
+ *
+ * @package Redirects
  */
 
 /**
