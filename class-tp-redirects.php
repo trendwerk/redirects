@@ -3,6 +3,13 @@
  * Plugin Name: Redirects
  * Description: Redirects. No additional features.
  *
+ * Plugin URI: https://github.com/trendwerk/redirects
+ * 
+ * Author: Trendwerk
+ * Author URI: https://github.com/trendwerk
+ * 
+ * Version: 1.0.0
+ *
  * @package Redirects
  */
 
