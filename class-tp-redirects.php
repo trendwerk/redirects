@@ -8,7 +8,7 @@
  * Author: Trendwerk
  * Author URI: https://github.com/trendwerk
  * 
- * Version: 1.0.0
+ * Version: 1.0.1
  *
  * @package Redirects
  */
@@ -39,7 +39,7 @@ class TP_Redirects {
 		/**
 		 * Rectify source
 		 */
-		$source = str_replace( site_url(), '', $source );
+		$source = str_replace( home_url(), '', $source );
 
 		$extension = explode( '.', $source );
 
@@ -63,7 +63,7 @@ class TP_Redirects {
 				$destination = trailingslashit( $destination );
 				
 			if( filter_var( $destination, FILTER_VALIDATE_URL ) === false )
-				return site_url() . $destination;
+				return home_url() . $destination;
 			else
 				return $destination; //External
 		}
@@ -253,7 +253,7 @@ class TP_Manage_Redirects {
 	 * @abstract
 	 */
 	static function correct( $url ) {
-		return str_replace( get_site_url(), '', esc_attr( $url ) );
+		return str_replace( get_home_url(), '', esc_attr( $url ) );
 	}
 
 	/**
@@ -410,7 +410,7 @@ class TP_Manage_Redirects {
 			'delete_confirm' => __( 'Are you sure you want to delete this redirect?', 'tp-redirects' ),
 			'edit_finish'    => __( 'Save', 'tp-redirects' ),
 			'edit_dismiss'   => __( 'Dismiss', 'tp-redirects' ),
-			'site_url'       => get_site_url(),
+			'home_url'       => get_home_url(),
 		) );
 
 		wp_enqueue_style( 'tp-redirects', plugins_url( 'assets/sass/admin.css', __FILE__ ) );

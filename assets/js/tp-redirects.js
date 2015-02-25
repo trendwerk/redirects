@@ -114,7 +114,7 @@
 		 * Correct search string
 		 */
 		this.correct = function( string ) {
-			var corrected = string.replace( TP_Redirects_Labels['site_url'], '' );
+			var corrected = string.replace( TP_Redirects_Labels['home_url'], '' );
 
 			return corrected;
 		}
