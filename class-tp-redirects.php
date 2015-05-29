@@ -49,6 +49,8 @@ class TP_Redirects {
 		if( 0 < strlen( $parameters ) )
 			$source .= '?' . $parameters;
 
+		$source = urldecode( esc_attr( $source ) );
+
 		/**
 		 * Find the destination
 		 */
