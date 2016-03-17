@@ -49,12 +49,14 @@ class TP_Redirects {
 		if( 0 < strlen( $parameters ) )
 			$source .= '?' . $parameters;
 
-		$source = urldecode( esc_attr( $source ) );
+		$source = esc_attr( $source );
+		$decodedSource = urldecode($source);
 
 		/**
 		 * Find the destination
 		 */
-		$destination = $wpdb->get_results( "SELECT * FROM {$wpdb->redirects} WHERE source='" . esc_sql( $source ) . "'" );
+		$query = "SELECT * FROM {$wpdb->redirects} WHERE source='" . esc_sql($source) . "' OR source='" . esc_sql($decodedSource) . "' LIMIT 1";
+		$destination = $wpdb->get_results($query);
 
 		if( 0 < count( $destination ) && isset( $destination[0]->destination ) && 0 < strlen( $destination[0]->destination ) ) {
 			$destination = $destination[0]->destination;
