@@ -4,11 +4,11 @@
  * Description: Redirects. No additional features.
  *
  * Plugin URI: https://github.com/trendwerk/redirects
- * 
+ *
  * Author: Trendwerk
  * Author URI: https://github.com/trendwerk
- * 
- * Version: 1.0.5
+ *
+ * Version: 1.0.6
  *
  * @package Redirects
  */
@@ -65,7 +65,7 @@ class TP_Redirects {
 
 			if( $destination == end( $extension ) ) //No extension (e.g. .html)
 				$destination = trailingslashit( $destination );
-				
+
 			if( filter_var( $destination, FILTER_VALIDATE_URL ) === false )
 				return home_url() . $destination;
 			else
@@ -108,7 +108,7 @@ class TP_Redirects {
 
 	    if( ! empty( $wpdb->collate ) )
 	        $charset_collate .= " COLLATE " . $wpdb->collate;
-		             
+
 		$sql = "CREATE TABLE IF NOT EXISTS " . $table_name . " (
 	        `source` varchar(191) NOT NULL DEFAULT '',
 	        `destination` varchar(191) NOT NULL DEFAULT '',
@@ -163,7 +163,7 @@ class TP_Manage_Redirects {
 
 			if( $term ) {
 				$redirects = $wpdb->get_results( "
-					SELECT * FROM " . $wpdb->redirects . " 
+					SELECT * FROM " . $wpdb->redirects . "
 					WHERE source LIKE '%" . $term . "%' OR destination LIKE '%" . $term . "%'
 					ORDER BY CASE
 						WHEN (source LIKE '%" . $term . "%' AND destination LIKE '%" . $term . "%') THEN 1
@@ -238,7 +238,7 @@ class TP_Manage_Redirects {
 
 		//Retrieve new HTML
 		$redirect = $wpdb->get_results( "SELECT * FROM " . $wpdb->redirects. " WHERE source = '" . $source . "'" );
-		
+
 		ob_start();
 		$this->display_redirects( $redirect );
 		$output = ob_get_clean();
@@ -250,8 +250,8 @@ class TP_Manage_Redirects {
 
 	/**
 	 * Correct url
-	 * 
-	 * @param  string $url 
+	 *
+	 * @param  string $url
 	 * @return string
 	 *
 	 * @abstract
@@ -286,7 +286,7 @@ class TP_Manage_Redirects {
 	 */
 	function manage() {
 		?>
-		
+
 		<div class="wrap tp-redirects">
 
 			<h2>
@@ -297,7 +297,7 @@ class TP_Manage_Redirects {
 				<input type="text" id="tp-redirects-search" placeholder="<?php _e( 'Find or create redirect..', 'tp-redirects' ); ?>" />
 				<input type="button" id="tp-redirects-add" class="button-primary" value="<?php _e( 'Add', 'tp-redirects' ); ?>" />
 			</p>
-			
+
 			<?php $this->display_redirect_table(); ?>
 
 		</div>
@@ -310,9 +310,9 @@ class TP_Manage_Redirects {
 	 */
 	function display_redirect_table() {
 		$redirects = $this->get_redirects( 1 );
-		
+
 		?>
-		
+
 		<table class="tp-redirects-table widefat">
 
 			<thead>
@@ -330,10 +330,10 @@ class TP_Manage_Redirects {
 				</tr>
 
 			</thead>
-			
+
 			<tbody>
 
-				<?php 
+				<?php
 					if( $redirects )
 						$this->display_redirects( $redirects );
 				?>
@@ -341,9 +341,9 @@ class TP_Manage_Redirects {
 			</tbody>
 
 			<tfoot>
-				
+
 				<tr class="tp-redirects-more">
-				
+
 					<td colspan="3">
 						<span class="spinner"></span>
 					</td>
@@ -361,7 +361,7 @@ class TP_Manage_Redirects {
 	 * Show redirects
 	 */
 	function display_redirects( $redirects ) {
-		foreach( $redirects as $i => $redirect ) { 
+		foreach( $redirects as $i => $redirect ) {
 			?>
 
 			<tr data-source="<?php echo $redirect->source; ?>" data-destination="<?php echo $redirect->destination; ?>" <?php if( $i % 2 ) echo 'class="alternate"'; ?>>
@@ -381,13 +381,13 @@ class TP_Manage_Redirects {
 
 			</tr>
 
-			<?php 
+			<?php
 		}
 	}
 
 	/**
 	 * Retrieve redirects
-	 * 
+	 *
 	 * @param int $page
 	 * @param int $to_page Maybe we want to return data for multiple pages
 	 * @return array
