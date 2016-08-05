@@ -1,16 +1,16 @@
 {
-	"name": "trendwerk/redirects",
-	"description": "Redirects for WordPress.",
-	"type": "wordpress-muplugin",
-	"license": "GPL-2.0+",
-	"authors": [
-		{
-			"name": "Harold Angenent",
-			"email": "harold@trendwerk.nl"
-		}
-	],
-	"require": {
-		"php": ">=5.4",
-		"composer/installers": "~1"
+  "name": "trendwerk/redirects",
+  "description": "Redirects for WordPress.",
+  "type": "wordpress-muplugin",
+  "license": "GPL-2.0+",
+  "authors": [
+    {
+      "name": "Harold Angenent",
+      "email": "harold@trendwerk.nl"
     }
+  ],
+  "require": {
+    "php": ">=5.4",
+    "composer/installers": "~1"
+  }
 }
