@@ -28,6 +28,9 @@ class TP_Redirects {
 		//Create table
 		register_activation_hook( __FILE__, array( $this, 'activate' ) );
 		add_action( 'init', array( $this, 'register_table' ), 9 );
+
+		// Multisite
+		add_action('wpmu_new_blog', [$this, 'maybeCreateTableForBlog']);
 	}
 
 	/**
@@ -101,13 +104,18 @@ class TP_Redirects {
 			$sites = get_sites();
 
 			foreach ($sites as $site) {
-				switch_to_blog($site->blog_id);
-				$this->maybe_create_table();
-				restore_current_blog();
+				$this->maybeCreateTableForBlog($site->blog_id);
 			}
 		} else {
 			$this->maybe_create_table();
 		}
+	}
+
+	public function maybeCreateTableForBlog($blogId)
+	{
+		switch_to_blog($blogId);
+		$this->maybe_create_table();
+		restore_current_blog();
 	}
 
 	/**
