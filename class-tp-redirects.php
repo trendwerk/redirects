@@ -26,7 +26,7 @@ class TP_Redirects {
 		add_action( 'template_redirect', array( $this, 'maybe_redirect' ), 9 );
 
 		//Create table
-		register_activation_hook( __FILE__, array( $this, 'maybe_create_table' ) );
+		register_activation_hook( __FILE__, array( $this, 'activate' ) );
 		add_action( 'init', array( $this, 'register_table' ), 9 );
 	}
 
@@ -93,6 +93,11 @@ class TP_Redirects {
 		}
 
 		return $template;
+	}
+
+	public function activate()
+	{
+		$this->maybe_create_table();
 	}
 
 	/**
