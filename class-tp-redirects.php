@@ -257,7 +257,7 @@ class TP_Manage_Redirects {
 	 * @abstract
 	 */
 	static function correct( $url ) {
-		return str_replace( get_home_url(), '', esc_attr( $url ) );
+		return str_replace( get_home_url(), '', stripslashes(esc_attr( $url )) );
 	}
 
 	/**
