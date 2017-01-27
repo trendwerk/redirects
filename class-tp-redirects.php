@@ -209,12 +209,12 @@ class TP_Manage_Redirects {
 		$source = $this->correct( $_POST['source'] );
 
 		if( $source )
-			$redirect = $wpdb->get_results( "SELECT * FROM " . $wpdb->redirects . " WHERE source = '" . $source . "'" );
+			$redirect = $wpdb->get_results( $wpdb->prepare("SELECT * FROM {$wpdb->redirects} WHERE source = %s", $source) );
 		else
 			die();
 
 		if( 0 == count( $redirect ) )
-			$redirect = $wpdb->query( "INSERT INTO " . $wpdb->redirects . " VALUES( '" . $source . "', '' );");
+			$redirect = $wpdb->query( $wpdb->prepare("INSERT INTO {$wpdb->redirects} VALUES( '%s', '' );", $source) );
 
 		$_POST['type'] = 'search';
 		$_POST['term'] = $source;
@@ -235,10 +235,10 @@ class TP_Manage_Redirects {
 		$destination = $this->correct( $_POST['destination'] );
 
 		if( $reference )
-			$wpdb->query( "UPDATE " . $wpdb->redirects . " SET source = '" . $source . "', destination = '" . $destination . "' WHERE source = '" . $reference . "'" );
+			$wpdb->query( $wpdb->prepare("UPDATE {$wpdb->redirects} SET source = %s, destination = %s WHERE source = %s", $source, $destination, $reference ) );
 
 		//Retrieve new HTML
-		$redirect = $wpdb->get_results( "SELECT * FROM " . $wpdb->redirects. " WHERE source = '" . $source . "'" );
+		$redirect = $wpdb->get_results( $wpdb->prepare("SELECT * FROM {$wpdb->redirects} WHERE source = %s", $source) );
 
 		ob_start();
 		$this->display_redirects( $redirect );
@@ -268,7 +268,7 @@ class TP_Manage_Redirects {
 		global $wpdb;
 
 		$source = esc_attr( $_POST['source'] );
-		$redirect = $wpdb->query( "DELETE FROM " . $wpdb->redirects . " WHERE source = '" . $source . "'" );
+		$redirect = $wpdb->query( $wpdb->prepare("DELETE FROM {$wpdb->redirects} WHERE source = %s", $source) );
 
 		wp_send_json( array(
 			'removed' => true,
@@ -401,7 +401,7 @@ class TP_Manage_Redirects {
 		if( 1 < $page )
 			$limit = ( ( $page - 1 ) * 100 ) . ',100';
 
-		return $wpdb->get_results( "SELECT * FROM " . $wpdb->redirects . " LIMIT " . $limit );
+		return $wpdb->get_results( "SELECT * FROM {$wpdb->redirects} LIMIT {$limit}" );
 	}
 
 	/**
