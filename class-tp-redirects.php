@@ -476,12 +476,12 @@ function tp_update_redirect( $source, $destination ) {
 	if( ! $source )
 		return;
 
-	$redirect = $wpdb->get_results( "SELECT * FROM " . $wpdb->redirects . " WHERE source = '" . $source . "'" );
+	$redirect = $wpdb->get_results( $wpdb->prepare("SELECT * FROM {$wpdb->redirects} WHERE source = %s", $source) );
 
 	if( 0 == count( $redirect ) )
-		$redirect = $wpdb->query( "INSERT INTO " . $wpdb->redirects . " VALUES( '" . $source . "', '' );");
+		$redirect = $wpdb->query( $wpdb->prepare("INSERT INTO {$wpdb->redirects} VALUES( '%s', '%s' );", $source, $destination) );
 	else
-		$redirect = $wpdb->query( "UPDATE " . $wpdb->redirects . " SET destination = '" . $destination . "' WHERE source = '" . $source . "'" );
+		$redirect = $wpdb->query( $wpdb->prepare("UPDATE {$wpdb->redirects} SET destination = %s WHERE source = %s", $destination, $source) );
 
-	return $wpdb->get_results( "SELECT * FROM " . $wpdb->redirects . " WHERE source = '" . $source . "'" );
+	return $wpdb->get_results( $wpdb->prepare("SELECT * FROM {$wpdb->redirects} WHERE source = %s", $source) );
 }
