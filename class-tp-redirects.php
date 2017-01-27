@@ -97,7 +97,17 @@ class TP_Redirects {
 
 	public function activate()
 	{
-		$this->maybe_create_table();
+		if (is_multisite()) {
+			$sites = get_sites();
+
+			foreach ($sites as $site) {
+				switch_to_blog($site->blog_id);
+				$this->maybe_create_table();
+				restore_current_blog();
+			}
+		} else {
+			$this->maybe_create_table();
+		}
 	}
 
 	/**
