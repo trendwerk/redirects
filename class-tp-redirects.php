@@ -31,6 +31,7 @@ class TP_Redirects {
 
 		// Multisite
 		add_action('wpmu_new_blog', [$this, 'maybeCreateTableForBlog']);
+		add_filter('wpmu_drop_tables', [$this, 'removeBlogTables']);
 	}
 
 	/**
@@ -116,6 +117,15 @@ class TP_Redirects {
 		switch_to_blog($blogId);
 		$this->maybe_create_table();
 		restore_current_blog();
+	}
+
+	public function removeBlogTables($tables)
+	{
+		global $wpdb;
+
+		$tables[] = $wpdb->prefix . $this->table;
+
+		return $tables;
 	}
 
 	/**
