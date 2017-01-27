@@ -164,7 +164,7 @@ class TP_Manage_Redirects {
 			if( $term ) {
 				$likeTerm = '%' . $term . '%';
 				$redirects = $wpdb->get_results( $wpdb->prepare("
-					SELECT * FROM " . $wpdb->redirects . "
+					SELECT * FROM {$wpdb->redirects}
 					WHERE source LIKE %s OR destination LIKE %s
 					ORDER BY CASE
 						WHEN (source LIKE %s AND destination LIKE %s) THEN 1
