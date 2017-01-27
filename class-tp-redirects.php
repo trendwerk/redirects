@@ -162,15 +162,16 @@ class TP_Manage_Redirects {
 			$replace = true;
 
 			if( $term ) {
-				$redirects = $wpdb->get_results( "
+				$likeTerm = '%' . $term . '%';
+				$redirects = $wpdb->get_results( $wpdb->prepare("
 					SELECT * FROM " . $wpdb->redirects . "
-					WHERE source LIKE '%" . $term . "%' OR destination LIKE '%" . $term . "%'
+					WHERE source LIKE %s OR destination LIKE %s
 					ORDER BY CASE
-						WHEN (source LIKE '%" . $term . "%' AND destination LIKE '%" . $term . "%') THEN 1
-						WHEN source LIKE '%" . $term . "%' THEN 2
-						WHEN destination LIKE '%" . $term . "%' THEN 3
+						WHEN (source LIKE %s AND destination LIKE %s) THEN 1
+						WHEN source LIKE %s THEN 2
+						WHEN destination LIKE %s THEN 3
 					END
-				" );
+				", $likeTerm, $likeTerm, $likeTerm, $likeTerm, $likeTerm, $likeTerm ));
 			} else {
 				$redirects = $this->get_redirects( 1 );
 				$page = 1;
