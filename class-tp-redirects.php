@@ -39,7 +39,7 @@ class TP_Redirects {
 		/**
 		 * Rectify source
 		 */
-		$source = str_replace( home_url(), '', $source );
+		$source = TP_Manage_Redirects::correct($source);
 
 		$extension = explode( '.', $source );
 
@@ -49,7 +49,6 @@ class TP_Redirects {
 		if( 0 < strlen( $parameters ) )
 			$source .= '?' . $parameters;
 
-		$source = esc_attr( $source );
 		$decodedSource = urldecode($source);
 
 		/**
@@ -158,7 +157,7 @@ class TP_Manage_Redirects {
 		$page = 0;
 
 		if( 'search' == $_POST['type'] ) {
-			$term = esc_attr( $_POST['term'] );
+			$term = self::correct( $_POST['term'] );
 			$replace = true;
 
 			if( $term ) {
@@ -230,7 +229,7 @@ class TP_Manage_Redirects {
 	function _save() {
 		global $wpdb;
 
-		$reference = esc_attr( $_POST['refSource'] );
+		$reference = self::correct( $_POST['refSource'] );
 		$source = $this->correct( $_POST['source'] );
 		$destination = $this->correct( $_POST['destination'] );
 
@@ -267,7 +266,7 @@ class TP_Manage_Redirects {
 	function _remove() {
 		global $wpdb;
 
-		$source = esc_attr( $_POST['source'] );
+		$source = self::correct( $_POST['source'] );
 		$redirect = $wpdb->query( $wpdb->prepare("DELETE FROM {$wpdb->redirects} WHERE source = %s", $source) );
 
 		wp_send_json( array(
