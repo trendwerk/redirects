@@ -109,10 +109,9 @@ class TP_Redirects {
 	    if( ! empty( $wpdb->collate ) )
 	        $charset_collate .= " COLLATE " . $wpdb->collate;
 
-		$sql = "CREATE TABLE IF NOT EXISTS " . $table_name . " (
+		$sql = "CREATE TABLE " . $table_name . " (
 	        `source` varchar(191) NOT NULL DEFAULT '',
 	        `destination` varchar(191) NOT NULL DEFAULT '',
-
 	        PRIMARY KEY (`source`)
 	    ) " . $charset_collate . ";";
 
