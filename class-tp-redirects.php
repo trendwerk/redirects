@@ -131,7 +131,7 @@ class TP_Redirects {
 	/**
 	 * Maybe create the redirects table if it doesn't yet exists
 	 */
-	function maybe_create_table() {
+	private function maybe_create_table() {
 		global $wpdb;
 
 		$table_name = $wpdb->prefix . $this->table;
