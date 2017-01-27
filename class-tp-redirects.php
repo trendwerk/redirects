@@ -55,7 +55,7 @@ class TP_Redirects {
 		/**
 		 * Find the destination
 		 */
-		$query = "SELECT * FROM {$wpdb->redirects} WHERE source='" . esc_sql($source) . "' OR source='" . esc_sql($decodedSource) . "' LIMIT 1";
+		$query = $wpdb->prepare("SELECT * FROM {$wpdb->redirects} WHERE source = %s OR source = %s LIMIT 1", $source, $decodedSource);
 		$destination = $wpdb->get_results($query);
 
 		if( 0 < count( $destination ) && isset( $destination[0]->destination ) && 0 < strlen( $destination[0]->destination ) ) {
