@@ -313,9 +313,6 @@
 						} );
 					}
 				} ).pointer( action );
-
-				if( dismiss )
-					pointer_el.close();
 			}
 		}
 		
