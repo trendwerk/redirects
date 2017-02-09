@@ -26,8 +26,12 @@ class TP_Redirects {
 		add_action( 'template_redirect', array( $this, 'maybe_redirect' ), 9 );
 
 		//Create table
-		register_activation_hook( __FILE__, array( $this, 'maybe_create_table' ) );
+		register_activation_hook( __FILE__, array( $this, 'activate' ) );
 		add_action( 'init', array( $this, 'register_table' ), 9 );
+
+		// Multisite
+		add_action('wpmu_new_blog', [$this, 'maybeCreateTableForBlog']);
+		add_filter('wpmu_drop_tables', [$this, 'removeBlogTables']);
 	}
 
 	/**
@@ -95,10 +99,39 @@ class TP_Redirects {
 		return $template;
 	}
 
+	public function activate()
+	{
+		if (is_multisite()) {
+			$sites = get_sites();
+
+			foreach ($sites as $site) {
+				$this->maybeCreateTableForBlog($site->blog_id);
+			}
+		} else {
+			$this->maybe_create_table();
+		}
+	}
+
+	public function maybeCreateTableForBlog($blogId)
+	{
+		switch_to_blog($blogId);
+		$this->maybe_create_table();
+		restore_current_blog();
+	}
+
+	public function removeBlogTables($tables)
+	{
+		global $wpdb;
+
+		$tables[] = $wpdb->prefix . $this->table;
+
+		return $tables;
+	}
+
 	/**
 	 * Maybe create the redirects table if it doesn't yet exists
 	 */
-	function maybe_create_table() {
+	private function maybe_create_table() {
 		global $wpdb;
 
 		$table_name = $wpdb->prefix . $this->table;
@@ -109,10 +142,9 @@ class TP_Redirects {
 	    if( ! empty( $wpdb->collate ) )
 	        $charset_collate .= " COLLATE " . $wpdb->collate;
 
-		$sql = "CREATE TABLE IF NOT EXISTS " . $table_name . " (
+		$sql = "CREATE TABLE " . $table_name . " (
 	        `source` varchar(191) NOT NULL DEFAULT '',
 	        `destination` varchar(191) NOT NULL DEFAULT '',
-
 	        PRIMARY KEY (`source`)
 	    ) " . $charset_collate . ";";
 
