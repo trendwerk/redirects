@@ -43,7 +43,7 @@ class TP_Redirects {
 		/**
 		 * Rectify source
 		 */
-		$source = str_replace( home_url(), '', $source );
+		$source = TP_Manage_Redirects::correct($source);
 
 		$extension = explode( '.', $source );
 
@@ -53,13 +53,12 @@ class TP_Redirects {
 		if( 0 < strlen( $parameters ) )
 			$source .= '?' . $parameters;
 
-		$source = esc_attr( $source );
 		$decodedSource = urldecode($source);
 
 		/**
 		 * Find the destination
 		 */
-		$query = "SELECT * FROM {$wpdb->redirects} WHERE source='" . esc_sql($source) . "' OR source='" . esc_sql($decodedSource) . "' LIMIT 1";
+		$query = $wpdb->prepare("SELECT * FROM {$wpdb->redirects} WHERE source = %s OR source = %s LIMIT 1", $source, $decodedSource);
 		$destination = $wpdb->get_results($query);
 
 		if( 0 < count( $destination ) && isset( $destination[0]->destination ) && 0 < strlen( $destination[0]->destination ) ) {
@@ -190,19 +189,20 @@ class TP_Manage_Redirects {
 		$page = 0;
 
 		if( 'search' == $_POST['type'] ) {
-			$term = esc_attr( $_POST['term'] );
+			$term = self::correct( $_POST['term'] );
 			$replace = true;
 
 			if( $term ) {
-				$redirects = $wpdb->get_results( "
-					SELECT * FROM " . $wpdb->redirects . "
-					WHERE source LIKE '%" . $term . "%' OR destination LIKE '%" . $term . "%'
+				$likeTerm = '%' . $term . '%';
+				$redirects = $wpdb->get_results( $wpdb->prepare("
+					SELECT * FROM {$wpdb->redirects}
+					WHERE source LIKE %s OR destination LIKE %s
 					ORDER BY CASE
-						WHEN (source LIKE '%" . $term . "%' AND destination LIKE '%" . $term . "%') THEN 1
-						WHEN source LIKE '%" . $term . "%' THEN 2
-						WHEN destination LIKE '%" . $term . "%' THEN 3
+						WHEN (source LIKE %s AND destination LIKE %s) THEN 1
+						WHEN source LIKE %s THEN 2
+						WHEN destination LIKE %s THEN 3
 					END
-				" );
+				", $likeTerm, $likeTerm, $likeTerm, $likeTerm, $likeTerm, $likeTerm ));
 			} else {
 				$redirects = $this->get_redirects( 1 );
 				$page = 1;
@@ -240,12 +240,12 @@ class TP_Manage_Redirects {
 		$source = $this->correct( $_POST['source'] );
 
 		if( $source )
-			$redirect = $wpdb->get_results( "SELECT * FROM " . $wpdb->redirects . " WHERE source = '" . $source . "'" );
+			$redirect = $wpdb->get_results( $wpdb->prepare("SELECT * FROM {$wpdb->redirects} WHERE source = %s", $source) );
 		else
 			die();
 
 		if( 0 == count( $redirect ) )
-			$redirect = $wpdb->query( "INSERT INTO " . $wpdb->redirects . " VALUES( '" . $source . "', '' );");
+			$redirect = $wpdb->query( $wpdb->prepare("INSERT INTO {$wpdb->redirects} VALUES( '%s', '' );", $source) );
 
 		$_POST['type'] = 'search';
 		$_POST['term'] = $source;
@@ -261,15 +261,15 @@ class TP_Manage_Redirects {
 	function _save() {
 		global $wpdb;
 
-		$reference = esc_attr( $_POST['refSource'] );
+		$reference = self::correct( $_POST['refSource'] );
 		$source = $this->correct( $_POST['source'] );
 		$destination = $this->correct( $_POST['destination'] );
 
 		if( $reference )
-			$wpdb->query( "UPDATE " . $wpdb->redirects . " SET source = '" . $source . "', destination = '" . $destination . "' WHERE source = '" . $reference . "'" );
+			$wpdb->query( $wpdb->prepare("UPDATE {$wpdb->redirects} SET source = %s, destination = %s WHERE source = %s", $source, $destination, $reference ) );
 
 		//Retrieve new HTML
-		$redirect = $wpdb->get_results( "SELECT * FROM " . $wpdb->redirects. " WHERE source = '" . $source . "'" );
+		$redirect = $wpdb->get_results( $wpdb->prepare("SELECT * FROM {$wpdb->redirects} WHERE source = %s", $source) );
 
 		ob_start();
 		$this->display_redirects( $redirect );
@@ -289,7 +289,7 @@ class TP_Manage_Redirects {
 	 * @abstract
 	 */
 	static function correct( $url ) {
-		return str_replace( get_home_url(), '', esc_attr( $url ) );
+		return str_replace( get_home_url(), '', stripslashes(esc_attr( $url )) );
 	}
 
 	/**
@@ -298,8 +298,8 @@ class TP_Manage_Redirects {
 	function _remove() {
 		global $wpdb;
 
-		$source = esc_attr( $_POST['source'] );
-		$redirect = $wpdb->query( "DELETE FROM " . $wpdb->redirects . " WHERE source = '" . $source . "'" );
+		$source = self::correct( $_POST['source'] );
+		$redirect = $wpdb->query( $wpdb->prepare("DELETE FROM {$wpdb->redirects} WHERE source = %s", $source) );
 
 		wp_send_json( array(
 			'removed' => true,
@@ -432,7 +432,7 @@ class TP_Manage_Redirects {
 		if( 1 < $page )
 			$limit = ( ( $page - 1 ) * 100 ) . ',100';
 
-		return $wpdb->get_results( "SELECT * FROM " . $wpdb->redirects . " LIMIT " . $limit );
+		return $wpdb->get_results( "SELECT * FROM {$wpdb->redirects} LIMIT {$limit}" );
 	}
 
 	/**
@@ -508,12 +508,12 @@ function tp_update_redirect( $source, $destination ) {
 	if( ! $source )
 		return;
 
-	$redirect = $wpdb->get_results( "SELECT * FROM " . $wpdb->redirects . " WHERE source = '" . $source . "'" );
+	$redirect = $wpdb->get_results( $wpdb->prepare("SELECT * FROM {$wpdb->redirects} WHERE source = %s", $source) );
 
 	if( 0 == count( $redirect ) )
-		$redirect = $wpdb->query( "INSERT INTO " . $wpdb->redirects . " VALUES( '" . $source . "', '' );");
+		$redirect = $wpdb->query( $wpdb->prepare("INSERT INTO {$wpdb->redirects} VALUES( '%s', '%s' );", $source, $destination) );
 	else
-		$redirect = $wpdb->query( "UPDATE " . $wpdb->redirects . " SET destination = '" . $destination . "' WHERE source = '" . $source . "'" );
+		$redirect = $wpdb->query( $wpdb->prepare("UPDATE {$wpdb->redirects} SET destination = %s WHERE source = %s", $destination, $source) );
 
-	return $wpdb->get_results( "SELECT * FROM " . $wpdb->redirects . " WHERE source = '" . $source . "'" );
+	return $wpdb->get_results( $wpdb->prepare("SELECT * FROM {$wpdb->redirects} WHERE source = %s", $source) );
 }
