@@ -8,7 +8,7 @@
  * Author: Trendwerk
  * Author URI: https://github.com/trendwerk
  *
- * Version: 1.1.0
+ * Version: 2.0.0
  *
  * @package Redirects
  */
