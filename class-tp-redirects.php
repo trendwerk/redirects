@@ -62,8 +62,7 @@ class TP_Redirects {
 		$destination = $wpdb->get_results($query);
 
 		if( 0 < count( $destination ) && isset( $destination[0]->destination ) && 0 < strlen( $destination[0]->destination ) ) {
-			$destination = $destination[0]->destination;
-
+			$destination = htmlspecialchars_decode( $destination[0]->destination );
 			$extension = explode( '.', $destination );
 
 			if( $destination == end( $extension ) ) //No extension (e.g. .html)
