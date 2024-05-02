@@ -67,15 +67,23 @@ class TP_Redirects
 
 		if (0 < count($destination) && isset($destination[0]->destination) && 0 < strlen($destination[0]->destination)) {
 			$destination = htmlspecialchars_decode($destination[0]->destination);
-			$extension = explode('.', $destination);
 
-			if ($destination == end($extension)) //No extension (e.g. .html)
+			// Add trailing slash to URL's without extension (eg .html) or query variables (eg ?page=2)
+			$path = parse_url($destination, PHP_URL_PATH);
+			$extension = pathinfo($path, PATHINFO_EXTENSION);
+			$hasExtension = !empty($extension);
+			$hasQueryvars = str_contains($destination, '?');
+
+			if (!$hasExtension && !$hasQueryvars) {
 				$destination = trailingslashit($destination);
+			}
 
-			if (filter_var($destination, FILTER_VALIDATE_URL) === false)
+			// Return interenal or external URL
+			if (filter_var($destination, FILTER_VALIDATE_URL) === false) {
 				return home_url() . $destination;
-			else
-				return $destination; //External
+			} else {
+				return $destination;
+			}
 		}
 
 		return false;
