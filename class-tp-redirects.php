@@ -9,7 +9,7 @@
  * Author: Trendwerk
  * Author URI: https://github.com/trendwerk
  *
- * Version: 2.0.2
+ * Version: 2.0.3
  *
  * @package Redirects
  */
